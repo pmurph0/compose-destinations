@@ -27,7 +27,11 @@ class DestinationWithNavArgsMapper {
                         "'$DESTINATION_ANNOTATION_NAV_ARGS_DELEGATE_ARGUMENT' cannot have arguments that are not navigation types.")
             }
 
-            if (parameters.any { it.isNavArg() }) {
+            fun Parameter.isNavArgsDelegateType(): Boolean {
+                return this.type.importable.qualifiedName == navArgsDelegateTypeLocal.type.qualifiedName
+            }
+
+            if (parameters.filterNot { it.isNavArgsDelegateType() }.any { it.isNavArg() }) {
                 throw IllegalDestinationsSetup("Composable '${composableName}': annotated " +
                         "function cannot define arguments of navigation type if using a '$DESTINATION_ANNOTATION_NAV_ARGS_DELEGATE_ARGUMENT' class.")
             }
